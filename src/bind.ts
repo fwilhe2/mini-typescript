@@ -6,7 +6,7 @@ export function bind(m: Module) {
     }
 
     function bindStatement(locals: Table, statement: Statement) {
-        if (statement.kind === Node.Var || statement.kind === Node.TypeAlias) {
+        if (statement.kind === Node.Var || statement.kind === Node.Const || statement.kind === Node.TypeAlias) {
             const symbol = locals.get(statement.name.text)
             if (symbol) {
                 const other = symbol.declarations.find(d => d.kind === statement.kind)
@@ -15,21 +15,21 @@ export function bind(m: Module) {
                 }
                 else {
                     symbol.declarations.push(statement)
-                    if (statement.kind === Node.Var) {
+                    if (statement.kind === Node.Var || statement.kind === Node.Const) {
                         symbol.valueDeclaration = statement
                     }
                 }
             }
             else {
                 locals.set(statement.name.text, {
-                    declarations: [statement], 
-                    valueDeclaration: statement.kind === Node.Var ? statement : undefined
+                    declarations: [statement],
+                    valueDeclaration: statement.kind === Node.Var || Node.Const ? statement : undefined
                 })
             }
         }
     }
 }
-export function resolve(locals: Table, name: string, meaning: Node.Var | Node.TypeAlias) {
+export function resolve(locals: Table, name: string, meaning: Node.Var | Node.Const | Node.TypeAlias) {
     const symbol = locals.get(name)
     if (symbol?.declarations.some(d => d.kind === meaning)) {
         return symbol

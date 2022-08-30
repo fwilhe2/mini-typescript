@@ -12,6 +12,8 @@ function typescript(statements: Statement[]) {
                 return [statement]
             case Node.Var:
                 return [{ ...statement, typename: undefined }]
+            case Node.Const:
+                return [{ ...statement, typename: undefined }]
             case Node.TypeAlias:
                 return []
         }

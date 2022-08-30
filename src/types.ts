@@ -1,6 +1,7 @@
 export enum Token {
     Function,
     Var,
+    Const,
     Type,
     Return,
     Equals,
@@ -26,6 +27,7 @@ export enum Node {
     Assignment,
     ExpressionStatement,
     Var,
+    Const,
     TypeAlias,
 }
 export type Error = {
@@ -49,7 +51,7 @@ export type Assignment = Location & {
     name: Identifier
     value: Expression
 }
-export type Statement = ExpressionStatement | Var | TypeAlias
+export type Statement = ExpressionStatement | Var | Const | TypeAlias
 export type ExpressionStatement = Location & {
     kind: Node.ExpressionStatement
     expr: Expression
@@ -60,15 +62,21 @@ export type Var = Location & {
     typename?: Identifier | undefined
     init: Expression
 }
+export type Const = Location & {
+    kind: Node.Const
+    name: Identifier
+    typename?: Identifier | undefined
+    init: Expression
+}
 export type TypeAlias = Location & {
     kind: Node.TypeAlias
     name: Identifier
     typename: Identifier
 }
-export type Declaration = Var | TypeAlias // plus others, like function
-export type Symbol = { 
+export type Declaration = Var | Const | TypeAlias // plus others, like function
+export type Symbol = {
     valueDeclaration: Declaration | undefined
-    declarations: Declaration[] 
+    declarations: Declaration[]
 }
 export type Table = Map<string, Symbol>
 export type Module = {
