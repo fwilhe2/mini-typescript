@@ -1,0 +1,1 @@
+const singleConstDeclaration = 1
